@@ -17,10 +17,13 @@ export const CLimaContainer = styled.div`
 `
 
 export const ErroMensagem = styled.p`
-  color: red;
+  color: black;
   text-align: center;
   margin-top: 10px;
   font-weight: bold;
   font-size: 25px;
   border-bottom: 2px solid black;
+  background-color: #f0f0f0; 
+  border-radius: 5px;
+  padding: 8px 12px;;
 `;

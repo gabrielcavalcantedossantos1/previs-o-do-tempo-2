@@ -63,7 +63,7 @@ const App = () => {
       console.log("Erro ao buscar clima: ", error)
       setClima(null)
       setPrevisao([])
-      setErro('Cidade não encontrada')
+      setErro('⚠️ Cidade não encontrada ⚠️')
     }
   }
 
