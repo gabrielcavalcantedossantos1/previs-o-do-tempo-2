@@ -28,7 +28,8 @@ const Previsao = ({ previsoes }) => {
               
               <ItemPrevisao background={corFundo}
               style={{
-                minWidth:'28vh'
+                minWidth:'28vh',
+                margin:'0 20px'
               }}>
                 <p><strong>{hora}</strong></p>
 

@@ -1,3 +1,4 @@
+// App.jsx
 import './AppStyles.js'
 import Busca from './components/Busca.jsx'
 import CLimaAtual from './components/CLimaAtual.jsx'
@@ -8,7 +9,6 @@ import axios from "axios"
 import { Titulo, CLimaContainer, ErroMensagem } from "./AppStyles.js"
 
 const App = () => {
-
   const apiKey = import.meta.env.VITE_API_KEY || ''
 
   const [cidade, setCidade] = useState('')
@@ -16,21 +16,17 @@ const App = () => {
   const [previsao, setPrevisao] = useState([])
   const [erro, setErro] = useState('')
 
-  // --------------------------
-  //  BUSCA AUTOMÁTICA POR GPS
-  // --------------------------
+  // BUSCA AUTOMÁTICA POR GPS
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude
       const lon = position.coords.longitude
 
       try {
-        // clima atual
         const respostaClimaAtual = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
         )
 
-        // previsão 3h
         const respostaPrevisao = await axios.get(
           `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
         )
@@ -45,9 +41,7 @@ const App = () => {
     })
   }, [apiKey])
 
-  // --------------------------
   // BUSCA AO DIGITAR CIDADE
-  // --------------------------
   const buscarClima = async () => {
     try {
       const respostaClimaAtual = await axios.get(
@@ -59,9 +53,12 @@ const App = () => {
       )
 
       setClima(respostaClimaAtual.data)
-      setPrevisao(respostaPrevisao.data.list.slice(0, 5))
+      setPrevisao(respostaPrevisao.data.list.slice(0, 6))
       setErro('')
 
+      // Scroll suave para o topo ao buscar
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      
     } catch (error) {
       console.log("Erro ao buscar clima: ", error)
       setClima(null)
@@ -70,14 +67,9 @@ const App = () => {
     }
   }
 
-  // --------------------------
-  // RENDERIZAÇÃO
-  // --------------------------
   return (
     <CLimaContainer>
-
       <Titulo>Condições Climáticas</Titulo>
-
       <Busca 
         cidade={cidade}
         setCidade={setCidade}
@@ -88,7 +80,6 @@ const App = () => {
 
       {clima && <CLimaAtual clima={clima} />}
       {previsao.length > 0 && <Previsao previsoes={previsao} />}
-
     </CLimaContainer>
   )
 }

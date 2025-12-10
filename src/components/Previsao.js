@@ -1,11 +1,10 @@
 import styled from "styled-components";
 
 export const PrevisaoContainer = styled.div`
-  max-width: 1000px; 
+  max-width: 1000px;
   margin: 20px auto;
   padding: 15px;
   border-radius: 5px;
-  border: 2px solid black;
 
   h4 {
     text-align: center;
@@ -16,20 +15,18 @@ export const PrevisaoContainer = styled.div`
     display: grid;
     padding: 0;
     list-style: none;
-    min-width: 130vh;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
+    justify-items: center;
+    justify-content: center;
 
-    justify-content: center; 
-    justify-items: center; 
-
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       grid-template-columns: repeat(2, 1fr);
       gap: 25px;
     }
 
-    @media (max-width: 500px) {
-      grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 620px) {
+      grid-template-columns: 1fr;
       gap: 20px;
     }
   }
@@ -41,14 +38,13 @@ export const ItemPrevisao = styled.li`
   flex-direction: column;
   align-items: center;
   text-align: center;
-
   background: ${(props) => props.background};
   padding: 15px;
   border-radius: 12px;
   border: 2px solid black;
-
-  width: 100%;    
-  max-width: 220px;  
+  width: 100%;
+  max-width: 220px;
+  min-height: 180px;
   transition: 0.2s;
 
   &:hover {
@@ -60,6 +56,10 @@ export const ItemPrevisao = styled.li`
     height: 80px;
     margin-bottom: 5px;
   }
+
+  @media (max-width: 500px) {
+    max-width: 90%;
+  }
 `;
 
 export const Detalhes = styled.div`
@@ -68,16 +68,18 @@ export const Detalhes = styled.div`
   border-radius: 10px;
   padding: 10px;
   margin-top: 5px;
-
   width: 100%;
-  max-width: 220px; 
+  max-width: 220px;
 
   p {
     margin: 4px 0;
   }
+
+  @media (max-width: 500px) {
+    max-width: 90%;
+  }
 `;
 
-/* Botões */
 export const Botao = styled.button`
   border: 2px solid black;
   padding: 10px;
