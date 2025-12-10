@@ -1,27 +1,40 @@
 import styled from "styled-components";
 
 export const PrevisaoContainer = styled.div`
-  margin-top: 20px;
+  max-width: 1000px; 
+  margin: 20px auto;
   padding: 15px;
   border-radius: 5px;
   border: 2px solid black;
 
   h4 {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
 
   ul {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
+    display: grid;
     padding: 0;
     list-style: none;
+    min-width: 130vh;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+
+    justify-content: center; 
+    justify-items: center; 
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 25px;
+    }
+
+    @media (max-width: 500px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
   }
 `;
 
-/* Estilo de cada card da previsão */
 export const ItemPrevisao = styled.li`
   color: black;
   display: flex;
@@ -30,10 +43,12 @@ export const ItemPrevisao = styled.li`
   text-align: center;
 
   background: ${(props) => props.background};
-  padding: 10px;
+  padding: 15px;
   border-radius: 12px;
   border: 2px solid black;
-  width: 120px;
+
+  width: 100%;    
+  max-width: 220px;  
   transition: 0.2s;
 
   &:hover {
@@ -45,9 +60,20 @@ export const ItemPrevisao = styled.li`
     height: 80px;
     margin-bottom: 5px;
   }
+`;
 
-  @media (max-width: 500px) {
-    width: 90px;
+export const Detalhes = styled.div`
+  background: #ffffff55;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 5px;
+
+  width: 100%;
+  max-width: 220px; 
+
+  p {
+    margin: 4px 0;
   }
 `;
 
@@ -62,18 +88,5 @@ export const Botao = styled.button`
   &:hover {
     background: #e7e7e7;
     cursor: pointer;
-  }
-`;
-
-/* Caixa de detalhes */
-export const Detalhes = styled.div`
-  background: #ffffff55;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 5px;
-
-  p {
-    margin: 4px 0;
   }
 `;

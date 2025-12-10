@@ -26,7 +26,10 @@ const Previsao = ({ previsoes }) => {
           return (
             <div key={previsao.dt}>
               
-              <ItemPrevisao background={corFundo}>
+              <ItemPrevisao background={corFundo}
+              style={{
+                minWidth:'28vh'
+              }}>
                 <p><strong>{hora}</strong></p>
 
                 <img
@@ -34,7 +37,7 @@ const Previsao = ({ previsoes }) => {
                   alt={clima.description}
                 />
 
-                {previsao.main.temp} °C
+                <p><strong>Temperatura: </strong>{previsao.main.temp} °C</p>
               </ItemPrevisao>
 
               {!aberto && (
