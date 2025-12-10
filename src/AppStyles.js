@@ -21,4 +21,6 @@ export const ErroMensagem = styled.p`
   text-align: center;
   margin-top: 10px;
   font-weight: bold;
+  font-size: 25px;
+  border-bottom: 2px solid black;
 `;
