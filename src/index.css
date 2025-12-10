@@ -7,3 +7,7 @@
 body,html{
     background: linear-gradient(to bottom,  #005c99,#89cff0);
 }
+
+p{
+    color:black
+}

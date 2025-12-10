@@ -4,63 +4,91 @@ import CLimaAtual from './components/CLimaAtual.jsx'
 import Previsao from './components/Previsao.jsx'
 import { useState, useEffect } from 'react'
 import axios from "axios"
+
 import { Titulo, CLimaContainer, ErroMensagem } from "./AppStyles.js"
 
 const App = () => {
 
   const apiKey = import.meta.env.VITE_API_KEY || ''
 
-  const [cidade ,setCidade] = useState('')
-  const [clima,setCLima] = useState(null)
-  const [previsao,setprevisao] = useState([])
-  const [erro, setErro] = useState('') 
+  const [cidade, setCidade] = useState('')
+  const [clima, setClima] = useState(null)
+  const [previsao, setPrevisao] = useState([])
+  const [erro, setErro] = useState('')
 
+  // --------------------------
+  //  BUSCA AUTOMÁTICA POR GPS
+  // --------------------------
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition( async (position) => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude
       const lon = position.coords.longitude
 
       try {
-        const resposta = await axios.get(
+        // clima atual
+        const respostaClimaAtual = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
         )
-        setCidade(resposta.data.name)
-        setCLima(resposta.data)
+
+        // previsão 3h
+        const respostaPrevisao = await axios.get(
+          `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=pt_br`
+        )
+
+        setCidade(respostaClimaAtual.data.name)
+        setClima(respostaClimaAtual.data)
+        setPrevisao(respostaPrevisao.data.list.slice(0, 6))
+        
       } catch (error) {
-        console.log("Erro ao buscar clima atual: ", error)
+        console.log("Erro ao buscar dados iniciais: ", error)
       }
     })
   }, [apiKey])
 
+  // --------------------------
+  // BUSCA AO DIGITAR CIDADE
+  // --------------------------
   const buscarClima = async () => {
-    try{
-      const respostaClima = await axios.get(
+    try {
+      const respostaClimaAtual = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${apiKey}&units=metric&lang=pt_br`
       )
+
       const respostaPrevisao = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?q=${cidade}&appid=${apiKey}&units=metric&lang=pt_br`
       )
 
-      setCLima(respostaClima.data)
-      setprevisao(respostaPrevisao.data.list.slice(0, 5))
+      setClima(respostaClimaAtual.data)
+      setPrevisao(respostaPrevisao.data.list.slice(0, 5))
       setErro('')
+
     } catch (error) {
       console.log("Erro ao buscar clima: ", error)
-      setCLima(null)
-      setprevisao([])
+      setClima(null)
+      setPrevisao([])
       setErro('Cidade não encontrada')
     }
   }
 
+  // --------------------------
+  // RENDERIZAÇÃO
+  // --------------------------
   return (
     <CLimaContainer>
-      <Titulo>Condições Climáticas</Titulo>
-      <Busca cidade={cidade} setCidade={setCidade} buscarClima={buscarClima}/>
 
-      {erro && <ErroMensagem>{erro}</ErroMensagem>} 
+      <Titulo>Condições Climáticas</Titulo>
+
+      <Busca 
+        cidade={cidade}
+        setCidade={setCidade}
+        buscarClima={buscarClima}
+      />
+
+      {erro && <ErroMensagem>{erro}</ErroMensagem>}
 
       {clima && <CLimaAtual clima={clima} />}
-      {previsao.length > 0 && <Previsao previsoes={previsao}/>}
+      {previsao.length > 0 && <Previsao previsoes={previsao} />}
+
     </CLimaContainer>
   )
 }

@@ -13,6 +13,7 @@ export const CLimaContainer = styled.div`
     align-items: center;
     justify-content: center;
     height: 100vh;
+    
 `
 
 export const ErroMensagem = styled.p`

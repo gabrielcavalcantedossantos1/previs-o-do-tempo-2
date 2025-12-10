@@ -9,12 +9,12 @@ export const ClimaInfo = styled.div`
     }
     
     img{
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         margin-bottom: 10px;
     }
 
     p{
-        margin-bottom: 5p;
+        margin-bottom: 5px;
     }
 `
