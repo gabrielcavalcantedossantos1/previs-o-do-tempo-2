@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const Titulo = styled.h2`
+    margin-top: 50px;
     font-size: 2rem;
     margin-bottom: 20px;
 `
@@ -13,7 +14,6 @@ export const CLimaContainer = styled.div`
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    
 `
 
 export const ErroMensagem = styled.p`
