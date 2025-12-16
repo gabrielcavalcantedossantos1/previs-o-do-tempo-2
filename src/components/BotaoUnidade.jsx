@@ -1,17 +1,13 @@
-// /src/components/BotaoUnidade.jsx
-
-import React from 'react';
-// Importe seu componente de estilo ou use o estilo inline
 import styled from 'styled-components'; 
 
 const BotaoFAB = styled.button`
-  position: fixed; /* Fixa na tela */
-  bottom: 20px;    /* 20px da borda inferior */
-  right: 20px;     /* 20px da borda direita */
-  z-index: 1000;   /* Garante que fique acima de outros elementos */
+  position: fixed; 
+  bottom: 20px;    
+  right: 20px;    
+  z-index: 1000;   
   padding: 10px 15px;
   border-radius: 50px;
-  background-color: #3f51b5; /* Cor primária */
+  background-color: #3f51b5; 
   color: white;
   border: none;
   cursor: pointer;

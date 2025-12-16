@@ -8,7 +8,7 @@ import {
 import { coresDeFundo } from './Estilos.jsx';
 import { useState } from "react";
 
-// ⬅️ ATUALIZADO: Recebendo todas as props necessárias
+
 const Previsao = ({ previsoes, unidade, converterTemperatura, converterVento }) => { 
   const [detalheAberto, setDetalheAberto] = useState(null);
 
@@ -16,10 +16,8 @@ const Previsao = ({ previsoes, unidade, converterTemperatura, converterVento }) 
   
   const climaPrincipal = previsoes[0]?.weather[0].main;
   
-  // ⬅️ ATUALIZADO: Usando $background para evitar o erro do styled-components
   const corFundo = coresDeFundo(climaPrincipal); 
 
-  // Definição dos Símbolos
   const simboloTemp = unidade === 'C' ? '°C' : '°F';
   const simboloVento = unidade === 'C' ? 'km/h' : 'mph';
 
@@ -32,33 +30,26 @@ const Previsao = ({ previsoes, unidade, converterTemperatura, converterVento }) 
           const hora = previsao.dt_txt.split(" ")[1].slice(0, 5);
           const aberto = detalheAberto === previsao.dt;
 
-          // ----------------------------------------------------------------------
-          // ✨ LÓGICA DE CONVERSÃO PARA CADA ITEM DA PREVISÃO ✨
-
-          // 1. Temperatura
           const tempExibida = 
               unidade === 'C' 
                   ? previsao.main.temp 
                   : converterTemperatura(previsao.main.temp);
 
-          // 2. Sensação Térmica
+          
           const sensacaoExibida = 
               unidade === 'C'
                   ? previsao.main.feels_like
                   : converterTemperatura(previsao.main.feels_like);
 
-          // 3. Vento
+          
           const velocidadeVentoMS = previsao.wind.speed;
           const velocidadeVentoExibida = 
               unidade === 'C'
-                  ? (velocidadeVentoMS * 3.6).toFixed(1) // Seu cálculo original: m/s para km/h
-                  : converterVento(velocidadeVentoMS);  // Agora, usa a função passada para m/s para mph
-          // ----------------------------------------------------------------------
+                  ? (velocidadeVentoMS * 3.6).toFixed(1) 
+                  : converterVento(velocidadeVentoMS);  
 
           return (
             <div key={previsao.dt}>
-              
-              {/* ⬅️ CORREÇÃO: Usando $background no styled-components */}
               <ItemPrevisao $background={corFundo}
               style={{
                 minWidth:'28vh',
@@ -71,7 +62,7 @@ const Previsao = ({ previsoes, unidade, converterTemperatura, converterVento }) 
                   alt={clima.description}
                 />
 
-                {/* EXIBINDO TEMPERATURA CONVERTIDA */}
+               
                 <p><strong>Temperatura: </strong>{tempExibida} {simboloTemp}</p>
               </ItemPrevisao>
 
@@ -85,12 +76,12 @@ const Previsao = ({ previsoes, unidade, converterTemperatura, converterVento }) 
                 <Detalhes>
                   <p><strong>Clima:</strong> {clima.description}</p>
                   
-                  {/* EXIBINDO SENSAÇÃO TÉRMICA CONVERTIDA */}
+                  
                   <p><strong>Sensação térmica:</strong> {sensacaoExibida} {simboloTemp}</p>
                   
                   <p><strong>Umidade:</strong> {previsao.main.humidity}%</p>
                   
-                  {/* EXIBINDO VENTO CONVERTIDO */}
+                  
                   <p><strong>Vento:</strong> {velocidadeVentoExibida} {simboloVento}</p>
 
                   <Botao onClick={() => setDetalheAberto(null)}>
