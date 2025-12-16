@@ -3,10 +3,29 @@ import './AppStyles.js'
 import Busca from './components/Busca.jsx'
 import CLimaAtual from './components/CLimaAtual.jsx'
 import Previsao from './components/Previsao.jsx'
+import BotaoUnidade from './components/BotaoUnidade.jsx'
 import { useState, useEffect } from 'react'
 import axios from "axios"
 
 import { Titulo, CLimaContainer, ErroMensagem } from "./AppStyles.js"
+
+// Funções de Conversão - Podemos colocá-las fora do componente para evitar recriação, mas aqui é um bom lugar por enquanto.
+// --------------------------------------------------------------------------------------------------------------------
+
+// 1. Temperatura: F = C * 1.8 + 32
+const celsiusParaFahrenheit = (celsius) => {
+  if (celsius === undefined || celsius === null) return null;
+  // .toFixed(2) para manter duas casas decimais
+  return (celsius * 1.8 + 32).toFixed(2); 
+};
+
+// 2. Vento: mph = m/s * 2.237 (OpenWeatherMap retorna em m/s na unidade 'metric')
+const mpsParaMph = (mps) => {
+  if (mps === undefined || mps === null) return null;
+  return (mps * 2.237).toFixed(1);
+};
+
+// --------------------------------------------------------------------------------------------------------------------
 
 const App = () => {
   const apiKey = import.meta.env.VITE_API_KEY || ''
@@ -15,8 +34,18 @@ const App = () => {
   const [clima, setClima] = useState(null)
   const [previsao, setPrevisao] = useState([])
   const [erro, setErro] = useState('')
+  
+  // NOVO ESTADO PARA A UNIDADE: 'C' (Celsius) ou 'F' (Fahrenheit)
+  const [unidade, setUnidade] = useState('C') 
 
-  // BUSCA AUTOMÁTICA POR GPS
+  // FUNÇÃO PARA TROCAR O ESTADO DA UNIDADE SEM CHAMAR A API
+  const handleTrocaUnidade = () => {
+    // Se for 'C', troca para 'F'; se for 'F', troca para 'C'
+    setUnidade(unidade === 'C' ? 'F' : 'C');
+  };
+
+
+  // BUSCA AUTOMÁTICA POR GPS (PERMANECE COM units=metric)
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude
@@ -41,7 +70,6 @@ const App = () => {
     })
   }, [apiKey])
 
-  // BUSCA AO DIGITAR CIDADE
   const buscarClima = async () => {
     try {
       const respostaClimaAtual = await axios.get(
@@ -56,7 +84,6 @@ const App = () => {
       setPrevisao(respostaPrevisao.data.list.slice(0, 6))
       setErro('')
 
-      // Scroll suave para o topo ao buscar
       window.scrollTo({ top: 0, behavior: 'smooth' })
       
     } catch (error) {
@@ -77,9 +104,29 @@ const App = () => {
       />
 
       {erro && <ErroMensagem>{erro}</ErroMensagem>}
+      
+      <BotaoUnidade 
+        handleTroca={handleTrocaUnidade} 
+        unidadeAtual={unidade} 
+      />
 
-      {clima && <CLimaAtual clima={clima} />}
-      {previsao.length > 0 && <Previsao previsoes={previsao} />}
+      {clima && 
+        <CLimaAtual 
+          clima={clima} 
+          unidade={unidade} 
+          converterTemperatura={celsiusParaFahrenheit}
+          converterVento={mpsParaMph} 
+        />}
+        
+      {/* ⬇️ TRECHO CORRIGIDO! ⬇️ */}
+      {previsao.length > 0 && 
+        <Previsao 
+          previsoes={previsao} 
+          unidade={unidade} 
+          converterTemperatura={celsiusParaFahrenheit}
+          converterVento={mpsParaMph} 
+        />}
+      {/* ⬆️ FIM DO TRECHO CORRIGIDO ⬆️ */}
     </CLimaContainer>
   )
 }
